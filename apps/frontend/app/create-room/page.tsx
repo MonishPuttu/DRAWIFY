@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 function RoomPage() {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   });

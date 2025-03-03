@@ -9,7 +9,7 @@ export function RoomCanvas({ roomId }: {roomId: string}) {
 
     useEffect(() => {
         const ws = new WebSocket(`${WS_URL}?token=${localStorage.getItem("token")}`)
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         ws.onopen = () => {
             setSocket(ws);
             const data = JSON.stringify({
