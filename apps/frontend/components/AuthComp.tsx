@@ -24,7 +24,7 @@ export default function AuthPage({ type }: { type: "signin" | "signup" }) {
   };
 
   const validateForm = () => {
-    let newErrors = { username: "", email: "", password: "" };
+    const newErrors = { username: "", email: "", password: "" };
     let isValid = true;
 
     if (!formState.username) {

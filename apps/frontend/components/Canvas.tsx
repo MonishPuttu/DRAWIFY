@@ -34,7 +34,7 @@ export function Canvas({
             return () => {
                 g.destroy();
             }
-    }, []);
+    }, [selectedTool, game, roomId, socket]);
 
     return <div style={{
         height: "100vh",
