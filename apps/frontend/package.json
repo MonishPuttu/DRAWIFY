@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-versions": "node --version && pnpm --version"
   },
   "dependencies": {
     "@types/axios": "^0.14.4",
