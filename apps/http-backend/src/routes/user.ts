@@ -1,7 +1,7 @@
-import { roomValidation, SignupValidation, signinValidation } from '@repo/common/types';
+import bcrypt from 'bcrypt';
+import { SignupValidation, signinValidation, roomValidations } from '@repo/common/types';
 import express, { Router } from 'express';
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { prismaClient } from '@repo/database/client';
 import { AuthMiddleware } from '../middlewares/AuthMiddleware';
@@ -120,9 +120,10 @@ UserRouter.post("/signin", async(req: Request, res: Response) => {
 
 UserRouter.post("/room", AuthMiddleware, async(req: Request, res: Response) => {
 
-    const { success, data } = roomValidation.safeParse(req.body);
+    const { success, data, error } = roomValidations.safeParse(req.body);
 
     if(!success) {
+        console.log("Validation Error:", error);
         res.json({
             message: "Incorrect Inputs"
         })

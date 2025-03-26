@@ -11,6 +11,6 @@ export const signinValidation = z.object({
     password: z.string()
 })
 
-export const roomValidation = z.object({
-    slug: z.string().min(3).max(20)
+export const roomValidations = z.object({
+    slug: z.string().min(1, "slug is required")
 })

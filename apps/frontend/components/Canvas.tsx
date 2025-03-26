@@ -20,7 +20,7 @@ export function Canvas({
 
     useEffect(() => {
         game?.setTool(selectedTool);
-    }, [selectedTool, game]);
+    }, [selectedTool]);
 
     useEffect(() => {
 
@@ -34,7 +34,7 @@ export function Canvas({
             return () => {
                 g.destroy();
             }
-    }, [selectedTool, game, roomId, socket]);
+    }, [roomId, socket]);
 
     return <div style={{
         height: "100vh",

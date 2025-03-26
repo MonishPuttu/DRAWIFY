@@ -1,6 +1,8 @@
-export default async function Page({ params }: { params: Promise<{ roomId: string }> }) {
-    const resolvedParams = await params; 
-    const { roomId } = resolvedParams;
-    return <div>Room ID: {roomId}</div>;
+"use client"
+import { use } from "react";
+import { RoomCanvas } from "@/components/RoomCanvas";
+
+export default function Page({ params }: { params: Promise<{ roomId: string }> }) {
+    const { roomId } = use(params);
+    return <RoomCanvas roomId={roomId} />;
 }
-  
