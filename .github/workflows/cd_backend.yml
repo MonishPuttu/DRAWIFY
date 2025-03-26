@@ -22,4 +22,4 @@ jobs:
           context: .
           file: ./Docker/Dockerfile.backend
           push: true
-          tags: Drawify/http-backend:${{ github.sha }}
+          tags: drawify/http-backend:${{ github.sha }}
