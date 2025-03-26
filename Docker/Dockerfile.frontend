@@ -6,6 +6,8 @@ WORKDIR /app
 
 COPY package.json package-lock.json turbo.json ./
 
+COPY pnpm-lock.yaml pnpm-workspace.yaml ./
+
 COPY apps/frontend ./apps/frontend
 
 COPY packages/database ./packages/database
