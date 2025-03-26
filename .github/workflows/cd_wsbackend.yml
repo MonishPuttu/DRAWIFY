@@ -1,4 +1,4 @@
-name: Ci/Cd backend
+name: Ci/Cd ws-backend
 on:
   push:
     branches: [ main ]
@@ -20,6 +20,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Docker/Dockerfile.backend
+          file: ./Docker/Dockerfile.ws
           push: true
-          tags: monishdev/http-backend:${{ github.sha }}
+          tags: monishdev/ws-backend:${{ github.sha }}

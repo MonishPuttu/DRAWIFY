@@ -1,5 +1,5 @@
-name: Ci/Cd backend
-on:
+name: Ci/Cd frontend
+on: 
   push:
     branches: [ main ]
 jobs:
@@ -20,6 +20,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Docker/Dockerfile.backend
+          file: ./Docker/Dockerfile.frontend
           push: true
-          tags: monishdev/http-backend:${{ github.sha }}
+          tags: monishdev/frontend:${{ github.sha }}
