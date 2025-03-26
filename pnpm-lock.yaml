@@ -57,9 +57,6 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@types/node':
         specifier: ^20
         version: 20.17.18
