@@ -24,10 +24,17 @@ jobs:
           push: true
           tags: monishdev/frontend:${{ github.sha }}
       - run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
-          chmod 700 /home/runner/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.126.212.204 -t "
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.126.212.204 << 'EOF'
+          # Stop and remove the container if it exists
           if sudo docker ps -a --format '{{.Names}}' | grep -q '^frontend$'; then
-            sudo docker stop frontend && sudo docker rm frontend;
+            sudo docker stop frontend && sudo docker rm frontend
           fi
-          sudo docker run --name frontend -d -p 3000:3000 ***/frontend:1e0ea4a5ac0264356b629b8f0029be9cd066150c"
+      
+          # Pull the latest image
+          sudo docker pull monishdev/frontend:${{ github.sha }}
+
+          # Run the new container
+          sudo docker run --name frontend -d -p 3000:3000 monishdev/frontend:${{ github.sha }}
+          EOF
