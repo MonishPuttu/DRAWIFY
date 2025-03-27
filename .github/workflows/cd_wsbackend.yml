@@ -23,3 +23,7 @@ jobs:
           file: ./Docker/Dockerfile.ws
           push: true
           tags: monishdev/ws-backend:${{ github.sha }}
+      - run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
+          chmod 700 /home/runner/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@13.126.212.204 -t "docker stop ws-backend && docker run --name ws-backend -d -p 3002:3002 monishdev/ws-backend:${{ github.sha }}"    

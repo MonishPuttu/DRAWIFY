@@ -16,4 +16,4 @@ RUN pnpm run generate:db
 
 EXPOSE 3001
 
-CMD [ "node", "start:backend" ]
+CMD [ "pnpm", "run", "start:backend" ]

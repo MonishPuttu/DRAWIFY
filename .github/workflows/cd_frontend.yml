@@ -23,3 +23,7 @@ jobs:
           file: ./Docker/Dockerfile.frontend
           push: true
           tags: monishdev/frontend:${{ github.sha }}
+      - run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
+          chmod 700 /home/runner/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@13.126.212.204 -t "docker stop frontend && docker run --name frontend -d -p 3000:3000 monishdev/frontend:${{ github.sha }}"    

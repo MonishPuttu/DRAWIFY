@@ -14,6 +14,6 @@ RUN pnpm install
 
 RUN pnpm run generate:db
 
-EXPOSE 3001
+EXPOSE 3002
 
-CMD [ "node", "start:ws" ]
+CMD [ "pnpm", "run", "start:ws" ]
