@@ -24,6 +24,17 @@ jobs:
           push: true
           tags: monishdev/http-backend:${{ github.sha }}
       - run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
-          chmod 700 /home/runner/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.126.212.204 -t "docker stop http-backend && docker run --name http-backend -d -p 3001:3001 monishdev/http-backend:${{ github.sha }}"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.126.212.204 << 'EOF'
+          # Stop and remove the container if it exists
+          if sudo docker ps -a --format '{{.Names}}' | grep -q '^http-backend$'; then
+            sudo docker stop http-backend && sudo docker rm http-backend
+          fi
+      
+          # Pull the latest image
+          sudo docker pull monishdev/http-backend:${{ github.sha }}
+
+          # Run the new container
+          sudo docker run --name http-backend -d -p 3000:3000 monishdev/http-backend:${{ github.sha }}
+          EOF
