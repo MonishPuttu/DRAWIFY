@@ -7,8 +7,8 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate:db": "npx prisma generate --schema=./packages/database/prisma/schema.prisma",
-    "start:backend": "cd apps/http-backend/dist && node index.js",
-    "start:ws": "cd apps/ws-backend/dist && node index.js",
+    "start:backend": "cd apps/http-backend && node index.js",
+    "start:ws": "cd apps/ws-backend && node index.js",
     "start:frontend": "cd apps/frontend && pnpm run start"
   },
   "devDependencies": {
