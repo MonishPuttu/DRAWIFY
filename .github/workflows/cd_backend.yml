@@ -26,4 +26,4 @@ jobs:
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 700 /home/runner/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@13.126.212.204 -t "docker stop http-backend && docker run --name http-backend -d -p 3001:3001 monishdev/http-backend:${{ github.sha }}"
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.126.212.204 -t "docker stop http-backend && docker run --name http-backend -d -p 3001:3001 monishdev/http-backend:${{ github.sha }}"
