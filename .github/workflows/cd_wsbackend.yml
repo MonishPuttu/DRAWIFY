@@ -36,5 +36,5 @@ jobs:
           sudo docker pull monishdev/ws-backend:${{ github.sha }}
 
           # Run the new container
-          sudo docker run --name ws-backend -d -p 3000:3000 monishdev/ws-backend:${{ github.sha }}
+          sudo docker run --name ws-backend -d -p 3002:3002 monishdev/ws-backend:${{ github.sha }}
           EOF

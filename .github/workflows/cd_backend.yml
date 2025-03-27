@@ -36,5 +36,5 @@ jobs:
           sudo docker pull monishdev/http-backend:${{ github.sha }}
 
           # Run the new container
-          sudo docker run --name http-backend -d -p 3000:3000 monishdev/http-backend:${{ github.sha }}
+          sudo docker run --name http-backend -d -p 3001:3001 monishdev/http-backend:${{ github.sha }}
           EOF
