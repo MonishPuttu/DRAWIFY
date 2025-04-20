@@ -1,46 +1,47 @@
-# Stage 1: Builder
-FROM node:20-alpine AS builder
+# syntax=docker/dockerfile:1.4
 
-WORKDIR /app
+# ---------- Builder Stage ----------
+    FROM node:20-alpine AS builder
 
-# Copy workspace & config files
-COPY package.json package-lock.json turbo.json ./
-COPY pnpm-lock.yaml pnpm-workspace.yaml ./
-
-# Copy source files
-COPY packages/typescript-config ./packages/typescript-config
-COPY packages/common ./packages/common
-COPY packages/database ./packages/database
-COPY apps/http-backend ./apps/http-backend
-
-# Install pnpm
-RUN npm install -g pnpm@10.5.2
-
-# Install dependencies
-RUN pnpm install --frozen-lockfile
-
-# Generate DB types (if applicable)
-RUN pnpm run generate:db
-
-# Build packages
-RUN pnpm --filter @repo/common build
-RUN pnpm --filter @repo/database build
-RUN pnpm --filter @repo/http-backend build
-
-# Stage 2: Production image
-FROM node:20-alpine
-
-WORKDIR /app
-
-# Copy only built files
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
-
-# Install pnpm
-RUN npm install -g pnpm@10.5.2
-
-EXPOSE 3001
-
-CMD [ "pnpm", "run", "start:backend" ]
+    WORKDIR /app
+    
+    # Copy root-level config
+    COPY package.json package-lock.json turbo.json ./
+    COPY pnpm-lock.yaml pnpm-workspace.yaml ./
+    
+    # Copy all packages
+    COPY packages/typescript-config ./packages/typescript-config
+    COPY packages/common ./packages/common
+    COPY packages/database ./packages/database
+    COPY apps/http-backend ./apps/http-backend
+    
+    # Install pnpm
+    RUN npm install -g pnpm@10.5.2
+    
+    # Install dependencies
+    RUN pnpm install --frozen-lockfile
+    
+    # Generate Prisma client
+    RUN pnpm run generate:db
+    
+    # Build all necessary packages
+    RUN pnpm --filter @repo/common build
+    RUN pnpm --filter @repo/database build
+    RUN pnpm --filter @repo/http-backend build
+    
+    # ---------- Runtime Stage ----------
+    FROM node:20-alpine
+    
+    WORKDIR /app
+    
+    # Copy only what we need from builder
+    COPY --from=builder /app/dist/apps/http-backend ./dist
+    COPY --from=builder /app/node_modules ./node_modules
+    COPY --from=builder /app/apps/http-backend/package.json ./package.json
+    
+    # Set environment vars if needed
+    ENV NODE_ENV production
+    
+    # Start the app
+    CMD ["node", "dist/index.js"]
+    
