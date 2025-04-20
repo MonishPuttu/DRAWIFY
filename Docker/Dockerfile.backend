@@ -1,9 +1,9 @@
-# Build stage
+# Stage 1: Builder
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Copy workspace & config files
 COPY package.json package-lock.json turbo.json ./
 COPY pnpm-lock.yaml pnpm-workspace.yaml ./
 
@@ -19,25 +19,20 @@ RUN npm install -g pnpm@10.5.2
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Generate database types
+# Generate DB types (if applicable)
 RUN pnpm run generate:db
 
-# Build packages in order
-WORKDIR /app/packages/common
-RUN pnpm run build || (echo "Common package build failed" && exit 1)
+# Build packages
+RUN pnpm --filter @repo/common build
+RUN pnpm --filter @repo/database build
+RUN pnpm --filter @repo/http-backend build
 
-WORKDIR /app/packages/database
-RUN pnpm run build || (echo "Database package build failed" && exit 1)
-
-WORKDIR /app/apps/http-backend
-RUN pnpm run build || (echo "HTTP backend build failed" && exit 1)
-
-# Production stage
+# Stage 2: Production image
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy built files from builder
+# Copy only built files
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
