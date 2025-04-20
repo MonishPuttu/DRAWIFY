@@ -2,12 +2,7 @@
     "extends": "@repo/typescript-config/base.json",
     "compilerOptions": {
       "rootDir": "./src",
-      "outDir": "../../dist/packages/database",
-      "tsBuildInfoFile": "../../dist/packages/database/tsconfig.tsbuildinfo",
-      "composite": true
+      "outDir": "./dist",
     },
-    "include": ["src/**/*"],
-    "references": [
-        { "path": "../common" }
-    ]
+
 }

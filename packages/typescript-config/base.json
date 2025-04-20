@@ -4,7 +4,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "incremental": true,
+    "incremental": false,
     "isolatedModules": true,
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "module": "NodeNext",
@@ -14,12 +14,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022",
-    "baseUrl": ".",
-    "paths": {
-      "@repo/*": ["packages/*/src"],
-      "@repo/common/*": ["packages/common/src/*"],
-      "@repo/database/*": ["packages/database/src/*"]
-    }
+    "target": "ES2022"
   }
 }

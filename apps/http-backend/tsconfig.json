@@ -1,19 +1,8 @@
 {
     "extends": "@repo/typescript-config/base.json",
     "compilerOptions": {
-        "rootDir": "./src",
-        "outDir": "../../dist/apps/http-backend",
-        "typeRoots": ["./types", "./node_modules/@types"],
-        "baseUrl": ".",
-        "paths": {
-            "@repo/*": ["../../packages/*/src"],
-            "@repo/common/*": ["../../packages/common/src/*"],
-            "@repo/database/*": ["../../packages/database/src/*"]
-        }
-    },
-    "include": ["src/**/*"],
-    "references": [
-        { "path": "../../packages/common" },
-        { "path": "../../packages/database" }
-    ]
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "typeRoots": ["./types", "./node_modules/@types"],
+  },
 }
