@@ -22,8 +22,15 @@ RUN pnpm install --frozen-lockfile
 # Generate database types
 RUN pnpm run generate:db
 
-# Build packages
-RUN pnpm run build
+# Build packages in order
+WORKDIR /app/packages/common
+RUN pnpm run build || (echo "Common package build failed" && exit 1)
+
+WORKDIR /app/packages/database
+RUN pnpm run build || (echo "Database package build failed" && exit 1)
+
+WORKDIR /app/apps/http-backend
+RUN pnpm run build || (echo "HTTP backend build failed" && exit 1)
 
 # Production stage
 FROM node:20-alpine
