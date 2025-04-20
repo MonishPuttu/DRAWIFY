@@ -12,6 +12,8 @@ RUN npm install -g pnpm@10.5.2
 
 RUN pnpm install
 
+RUN pnpm run build:ws
+
 RUN pnpm run generate:db
 
 EXPOSE 3002
