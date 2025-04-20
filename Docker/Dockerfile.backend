@@ -22,7 +22,13 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm run generate:db
 
 # Build the project
-RUN pnpm run build
+RUN pnpm run build --filter=http-backend...
+
+# Create the dist directory structure
+RUN mkdir -p dist/apps/http-backend
+
+# Copy the built files to the correct location
+RUN cp -r apps/http-backend/dist/* dist/apps/http-backend/
 
 EXPOSE 3001
 
