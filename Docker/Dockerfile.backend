@@ -21,13 +21,12 @@ RUN pnpm install --frozen-lockfile
 # Generate database types
 RUN pnpm run generate:db
 
-# Build packages in order and ensure outputs are linked
+# Build packages in order
 RUN cd packages/common && pnpm run build && \
     cd ../database && pnpm run build && \
     cd ../.. && \
-    # Link the built packages
-    pnpm link packages/common && \
-    pnpm link packages/database && \
+    # Install workspace dependencies
+    pnpm install --frozen-lockfile && \
     # Build the backend
     cd apps/http-backend && pnpm run build
 
