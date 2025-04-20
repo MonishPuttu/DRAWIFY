@@ -18,28 +18,29 @@ RUN npm install -g pnpm@10.5.2
 # Install root dependencies
 RUN pnpm install --frozen-lockfile
 
-# Install and build each package separately
-WORKDIR /app/packages/typescript-config
-RUN pnpm install
-
+# Build packages in order with proper output handling
 WORKDIR /app/packages/common
-RUN pnpm install; pnpm run build
+RUN pnpm install && \
+    pnpm run build && \
+    mkdir -p /app/dist/packages/common && \
+    cp -r dist/* /app/dist/packages/common/
 
 WORKDIR /app/packages/database
-RUN pnpm install; pnpm run build
-
-WORKDIR /app/apps/http-backend
-RUN pnpm install; pnpm run build
+RUN pnpm install && \
+    pnpm run build && \
+    mkdir -p /app/dist/packages/database && \
+    cp -r dist/* /app/dist/packages/database/
 
 # Generate database types
 WORKDIR /app
 RUN pnpm run generate:db
 
-# Create the dist directory structure
-RUN mkdir -p dist/apps/http-backend
-
-# Copy the built files to the correct location
-RUN cp -r apps/http-backend/dist/* dist/apps/http-backend/
+# Build the backend
+WORKDIR /app/apps/http-backend
+RUN pnpm install && \
+    pnpm run build && \
+    mkdir -p /app/dist/apps/http-backend && \
+    cp -r dist/* /app/dist/apps/http-backend/
 
 EXPOSE 3001
 
