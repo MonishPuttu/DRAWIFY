@@ -189,7 +189,7 @@ UserRouter.get("/room/:slug", async (req: Request, res: Response) => {
     const slug = req.params.slug;
 
     if (!slug) {
-        res.status(400).json({ message: "Slug is required" });
+        res.status(400).json({ message: "Room slug is required" });
         return;
     }
 
@@ -204,9 +204,7 @@ UserRouter.get("/room/:slug", async (req: Request, res: Response) => {
         return;
     }
 
-    const roomId = room.id;
-
     res.json({
-        roomId
-    })
-})
+        roomId: room.id
+    });
+});

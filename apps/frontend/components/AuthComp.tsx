@@ -1,18 +1,28 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Moon, Sun } from "lucide-react";
 
 export default function AuthPage({ type }: { type: "signin" | "signup" }) {
   const router = useRouter();
+  const [isDark, setIsDark] = useState(true);
   const [formState, setFormState] = useState({
     username: "",
     email: "",
     password: "",
     errors: { username: "", email: "", password: "" },
   });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -78,20 +88,32 @@ export default function AuthPage({ type }: { type: "signin" | "signup" }) {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold text-center">
-          {type === "signin" ? "Sign In" : "Sign Up"}
-        </h2>
+    <div className="flex items-center justify-center min-h-screen bg-purple-50 dark:bg-gray-950 transition-colors duration-200">
+      <div className="w-full max-w-md p-8 space-y-4 bg-white dark:bg-gray-900 shadow-md rounded-lg border border-purple-200 dark:border-gray-800">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-purple-900 dark:text-white">
+            {type === "signin" ? "Sign In" : "Sign Up"}
+          </h2>
+          <button 
+            onClick={() => setIsDark(!isDark)}
+            className="p-2 rounded-lg hover:bg-purple-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5 text-gray-300" />
+            ) : (
+              <Moon className="h-5 w-5 text-purple-600" />
+            )}
+          </button>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Username</label>
+            <label className="block text-sm font-medium text-purple-700 dark:text-gray-300">Username</label>
             <input
               type="text"
               name="username"
               value={formState.username}
               onChange={handleChange}
-              className="w-full p-2 mt-1 border rounded"
+              className="w-full p-2 mt-1 border border-purple-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-purple-900 dark:text-white focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent"
               autoComplete="username"
             />
             {formState.errors.username && (
@@ -101,13 +123,13 @@ export default function AuthPage({ type }: { type: "signin" | "signup" }) {
 
           {type === "signup" && (
             <div>
-              <label className="block text-sm font-medium">Email</label>
+              <label className="block text-sm font-medium text-purple-700 dark:text-gray-300">Email</label>
               <input
                 type="email"
                 name="email"
                 value={formState.email}
                 onChange={handleChange}
-                className="w-full p-2 mt-1 border rounded"
+                className="w-full p-2 mt-1 border border-purple-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-purple-900 dark:text-white focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent"
                 autoComplete="email"
               />
               {formState.errors.email && (
@@ -117,13 +139,13 @@ export default function AuthPage({ type }: { type: "signin" | "signup" }) {
           )}
 
           <div>
-            <label className="block text-sm font-medium">Password</label>
+            <label className="block text-sm font-medium text-purple-700 dark:text-gray-300">Password</label>
             <input
               type="password"
               name="password"
               value={formState.password}
               onChange={handleChange}
-              className="w-full p-2 mt-1 border rounded"
+              className="w-full p-2 mt-1 border border-purple-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-purple-900 dark:text-white focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent"
               autoComplete="current-password"
             />
             {formState.errors.password && (
@@ -133,19 +155,19 @@ export default function AuthPage({ type }: { type: "signin" | "signup" }) {
 
           <button
             type="submit"
-            className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+            className="w-full p-2 text-white bg-purple-600 rounded hover:bg-purple-700 transition-colors"
           >
             {type === "signin" ? "Sign In" : "Sign Up"}
           </button>
         </form>
 
-        <p className="text-center text-sm">
+        <p className="text-center text-sm text-purple-700 dark:text-gray-300">
           {type === "signin"
             ? "Don't have an account? "
             : "Already have an account? "}
           <Link
             href={type === "signin" ? "/signup" : "/signin"}
-            className="text-blue-500 hover:underline"
+            className="text-purple-600 dark:text-purple-400 hover:underline"
           >
             {type === "signin" ? "Sign Up" : "Sign In"}
           </Link>

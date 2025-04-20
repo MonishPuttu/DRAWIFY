@@ -111,4 +111,3 @@ function add(p1: Point, p2: Point) {
 function scale(p: Point, scaler:number) {
     return new Point(p.x * scaler, p.y * scaler);
 }
-

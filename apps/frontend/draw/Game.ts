@@ -1,4 +1,3 @@
-
 import { Viewport } from './ViewPort';
 import { Tool } from './../components/Canvas';
 import { getExistingShapes } from "../draw/http";
@@ -64,7 +63,7 @@ export class Game {
         this.canvas.removeEventListener("mousemove", this.mouseMoveHandler)
     }
 
-    setTool(tool: "circle" | "pencil" | "rect") {
+    setTool(tool: "circle" | "pencil" | "rect" | "eraser") {
         this.selectedTool = tool;
         this.clearCanvas();
     }
@@ -80,10 +79,15 @@ export class Game {
             const message = JSON.parse(event.data);
 
             if (message.type == "chat") {
-                const parsedShape = JSON.parse(message.message);
-                const exists = this.existingShapes.some(s => s.id === parsedShape.shape.id);
-                if (!exists) {
-                    this.existingShapes.push(parsedShape.shape);
+                const parsedMessage = JSON.parse(message.message);
+                if (parsedMessage.shape) {
+                    const exists = this.existingShapes.some(s => s.id === parsedMessage.shape.id);
+                    if (!exists) {
+                        this.existingShapes.push(parsedMessage.shape);
+                        this.clearCanvas();
+                    }
+                } else if (parsedMessage.deleteShape) {
+                    this.existingShapes = this.existingShapes.filter(shape => shape.id !== parsedMessage.deleteShape);
                     this.clearCanvas();
                 }
             }
@@ -91,8 +95,9 @@ export class Game {
     }
 
     clearCanvas() {
-
        const pan = this.Viewport.getOffset();
+       const isDark = document.documentElement.classList.contains('dark');
+       const shapeColor = isDark ? "rgba(255, 255, 255, 1)" : "rgba(0, 0, 0, 1)";
 
        this.ctx.setTransform(
         1 / this.Viewport.zoom, 0,
@@ -105,17 +110,17 @@ export class Game {
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = "rgba(0, 0, 0)"
+        this.ctx.fillStyle = isDark ? "#161718" : "#F8F9FA";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.restore();
 
         this.existingShapes.forEach((shape) => {
             if (shape.type === "rect") {
-                this.ctx.strokeStyle = "rgba(255, 255, 255)"
+                this.ctx.strokeStyle = shapeColor;
                 this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
             } else if (shape.type === "circle") {
-                this.ctx.strokeStyle = "rgba(255, 255, 255)";
+                this.ctx.strokeStyle = shapeColor;
                 this.ctx.beginPath();
                 this.ctx.arc(shape.centerX, shape.centerY, Math.abs(shape.radius), 0, Math.PI * 2);
                 this.ctx.stroke();
@@ -124,7 +129,7 @@ export class Game {
                 if (!shape.points || shape.points.length === 0) {
                     return;
                 }
-                this.ctx.strokeStyle = "rgba(255, 255, 255)";
+                this.ctx.strokeStyle = shapeColor;
                 this.ctx.beginPath();
                 this.ctx.moveTo(shape.points[0]!.x, shape.points[0]!.y);
                 for (let i= 1; i< shape.points.length; i++) {
@@ -145,8 +150,57 @@ export class Game {
 
         if (this.selectedTool === "pencil") {
             this.PencilPoints = [{ x, y }];
+        } else if (this.selectedTool === "eraser") {
+            const clickedShape = this.findShapeAtPoint(x, y);
+            if (clickedShape) {
+                this.existingShapes = this.existingShapes.filter(shape => shape.id !== clickedShape.id);
+                this.clearCanvas();
+                
+                this.socket.send(JSON.stringify({
+                    type: "chat",
+                    message: JSON.stringify({
+                        deleteShape: clickedShape.id
+                    }),
+                    roomId: this.roomId
+                }));
+            }
         }
     }
+
+    private findShapeAtPoint(x: number, y: number): Shape | null {
+        for (let i = this.existingShapes.length - 1; i >= 0; i--) {
+            const shape = this.existingShapes[i];
+            if (!shape) continue;
+            
+            if (shape.type === "rect") {
+                const rect = shape as { id: string; type: "rect"; x: number; y: number; width: number; height: number };
+                if (x >= rect.x && x <= rect.x + rect.width &&
+                    y >= rect.y && y <= rect.y + rect.height) {
+                    return rect;
+                }
+            } else if (shape.type === "circle") {
+                const circle = shape as { id: string; type: "circle"; centerX: number; centerY: number; radius: number };
+                const dx = x - circle.centerX;
+                const dy = y - circle.centerY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance <= Math.abs(circle.radius)) {
+                    return circle;
+                }
+            } else if (shape.type === "pencil") {
+                const pencil = shape as { id: string; type: "pencil"; points: { x: number; y: number }[] };
+                const hitRadius = 10;
+                for (const point of pencil.points) {
+                    const dx = x - point.x;
+                    const dy = y - point.y;
+                    if (Math.sqrt(dx * dx + dy * dy) <= hitRadius) {
+                        return pencil;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     mouseUpHandler = (e: MouseEvent) => {
         if (e.button !== 0) return;
 
@@ -208,7 +262,8 @@ export class Game {
             this.clearCanvas();
             this.ctx.save();
 
-            this.ctx.strokeStyle = "rgba(255, 255, 255)";
+            const isDark = document.documentElement.classList.contains('dark');
+            this.ctx.strokeStyle = isDark ? "rgba(255, 255, 255, 1)" : "rgba(0, 0, 0, 1)";
             const selectedTool = this.selectedTool;
             console.log(selectedTool)
             if (selectedTool === "rect") {
