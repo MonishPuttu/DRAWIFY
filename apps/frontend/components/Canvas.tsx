@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { IconButton } from "./IconButton";
-import { Circle, Pencil, RectangleHorizontalIcon, Moon, Sun, Eraser } from "lucide-react";
+import { Circle, Pencil, RectangleHorizontalIcon, Moon, Sun, Eraser, Share2 } from "lucide-react";
 import { Game } from "@/draw/Game";
 import { Viewport } from "@/draw/ViewPort";
+import { ShareDialog } from "./ShareDialog";
 
 export type Tool = "circle" | "rect" | "pencil" | "eraser";
 
@@ -25,6 +26,7 @@ export function Canvas({
         // Then check system preference
         return window.matchMedia('(prefers-color-scheme: dark)').matches;
     });
+    const [showShareDialog, setShowShareDialog] = useState(false);
 
     useEffect(() => {
         if (isDark) {
@@ -57,30 +59,40 @@ export function Canvas({
         }
     }, [roomId, socket]);
 
-    return <div style={{
-        height: "100vh",
-        overflow: "hidden"
-    }}>
-        <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
-        <Topbar 
-            setSelectedTool={setSelectedTool} 
-            selectedTool={selectedTool} 
-            isDark={isDark}
-            setIsDark={setIsDark}
-        />
-    </div>
+    return (
+        <div style={{
+            height: "100vh",
+            overflow: "hidden"
+        }}>
+            <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
+            <Topbar 
+                setSelectedTool={setSelectedTool} 
+                selectedTool={selectedTool} 
+                isDark={isDark}
+                setIsDark={setIsDark}
+                onShareClick={() => setShowShareDialog(true)}
+            />
+            <ShareDialog 
+                isOpen={showShareDialog}
+                onClose={() => setShowShareDialog(false)}
+                roomId={roomId}
+            />
+        </div>
+    );
 }
 
 function Topbar({
     selectedTool, 
     setSelectedTool,
     isDark,
-    setIsDark
+    setIsDark,
+    onShareClick
 }: {
     selectedTool: Tool,
     setSelectedTool: (s: Tool) => void,
     isDark: boolean,
-    setIsDark: (dark: boolean) => void
+    setIsDark: (dark: boolean) => void,
+    onShareClick: () => void
 }) {
     return (
         <div className="fixed top-4 left-1/2 -translate-x-1/2">
@@ -116,6 +128,11 @@ function Topbar({
                             <Moon className="w-5 h-5 text-purple-400" />
                         )
                     }
+                />
+                <IconButton 
+                    onClick={onShareClick}
+                    activated={false}
+                    icon={<Share2 className="w-5 h-5" />}
                 />
             </div>
         </div>

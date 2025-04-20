@@ -80,14 +80,14 @@ export class Game {
 
             if (message.type == "chat") {
                 const parsedMessage = JSON.parse(message.message);
-                if (parsedMessage.shape) {
-                    const exists = this.existingShapes.some(s => s.id === parsedMessage.shape.id);
+                if (parsedMessage.shape && parsedMessage.shape.id) {
+                    const exists = this.existingShapes.some(s => s && s.id === parsedMessage.shape.id);
                     if (!exists) {
                         this.existingShapes.push(parsedMessage.shape);
                         this.clearCanvas();
                     }
                 } else if (parsedMessage.deleteShape) {
-                    this.existingShapes = this.existingShapes.filter(shape => shape.id !== parsedMessage.deleteShape);
+                    this.existingShapes = this.existingShapes.filter(shape => shape && shape.id !== parsedMessage.deleteShape);
                     this.clearCanvas();
                 }
             }
@@ -142,7 +142,7 @@ export class Game {
         });
     }
 
-    mouseDownHandler = (e: MouseEvent) => {
+    private mouseDownHandler = (e: MouseEvent) => {
         if (e.button !== 0) return;
 
         const { x, y } = this.Viewport.getMouse(e);
@@ -153,15 +153,15 @@ export class Game {
         if (this.selectedTool === "pencil") {
             this.PencilPoints = [{ x, y }];
         } else if (this.selectedTool === "eraser") {
-            const clickedShape = this.findShapeAtPoint(x, y);
-            if (clickedShape) {
-                this.existingShapes = this.existingShapes.filter(shape => shape.id !== clickedShape.id);
+            const shape = this.findShapeAtPoint(x, y);
+            if (shape) {
+                this.existingShapes = this.existingShapes.filter(s => s && s.id !== shape.id);
                 this.clearCanvas();
                 
                 this.socket.send(JSON.stringify({
                     type: "chat",
                     message: JSON.stringify({
-                        deleteShape: clickedShape.id
+                        deleteShape: shape.id
                     }),
                     roomId: this.roomId
                 }));
