@@ -29,13 +29,16 @@
     RUN pnpm --filter @repo/database build
     RUN pnpm --filter @repo/http-backend build
     
+    # Ensure the dist folder is created and built for http-backend
+    RUN mkdir -p dist/apps/http-backend
+    
     # ---------- Runtime Stage ----------
     FROM node:20-alpine
     
     WORKDIR /app
     
     # Copy only what we need from builder
-    COPY --from=builder /app/dist/apps/http-backend ./dist
+    COPY --from=builder /app/dist/apps/http-backend ./dist/apps/http-backend
     COPY --from=builder /app/node_modules ./node_modules
     COPY --from=builder /app/apps/http-backend/package.json ./package.json
     
@@ -43,5 +46,5 @@
     ENV NODE_ENV production
     
     # Start the app
-    CMD ["node", "dist/index.js"]
+    CMD ["node", "dist/apps/http-backend/index.js"]
     
