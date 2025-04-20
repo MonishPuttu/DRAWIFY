@@ -3,6 +3,7 @@
     "compilerOptions": {
       "rootDir": "./src",
       "outDir": "../../dist/packages/database",
+      "tsBuildInfoFile": "../../dist/packages/database/tsconfig.tsbuildinfo",
       "composite": true
     },
     "include": ["src/**/*"],
