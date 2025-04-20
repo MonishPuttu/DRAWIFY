@@ -1,8 +1,15 @@
 node_modules
+**/node_modules
 apps/frontend/node_modules
 apps/http-backend/node_modules
 apps/ws-backend/node_modules
 packages/database/node_modules
+packages/common/node_modules
+packages/typescript-config/node_modules
 dist
 build
 .git
+*.log
+.DS_Store
+.env
+.env.*
