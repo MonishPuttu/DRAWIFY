@@ -1,4 +1,5 @@
-FROM node:20-alpine
+# Build stage
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -15,32 +16,28 @@ COPY apps/http-backend ./apps/http-backend
 # Install pnpm
 RUN npm install -g pnpm@10.5.2
 
-# Install root dependencies
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Build packages in order with proper output handling
-WORKDIR /app/packages/common
-RUN pnpm install && \
-    pnpm run build && \
-    mkdir -p /app/dist/packages/common && \
-    cp -r dist/* /app/dist/packages/common/
-
-WORKDIR /app/packages/database
-RUN pnpm install && \
-    pnpm run build && \
-    mkdir -p /app/dist/packages/database && \
-    cp -r dist/* /app/dist/packages/database/
-
 # Generate database types
-WORKDIR /app
 RUN pnpm run generate:db
 
-# Build the backend
-WORKDIR /app/apps/http-backend
-RUN pnpm install && \
-    pnpm run build && \
-    mkdir -p /app/dist/apps/http-backend && \
-    cp -r dist/* /app/dist/apps/http-backend/
+# Build packages
+RUN pnpm run build
+
+# Production stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy built files from builder
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+
+# Install pnpm
+RUN npm install -g pnpm@10.5.2
 
 EXPOSE 3001
 
