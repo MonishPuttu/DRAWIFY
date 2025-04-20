@@ -26,7 +26,7 @@ jobs:
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
           chmod 600 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.126.212.204 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.233.131.120 << 'EOF'
           # Stop and remove the container if it exists
           if sudo docker ps -a --format '{{.Names}}' | grep -q '^frontend$'; then
             sudo docker stop frontend && sudo docker rm frontend
