@@ -21,10 +21,15 @@ RUN pnpm install --frozen-lockfile
 # Generate database types
 RUN pnpm run generate:db
 
-# Build packages in order
-RUN cd packages/common && pnpm run build
-RUN cd packages/database && pnpm run build
-RUN cd apps/http-backend && pnpm run build
+# Build packages in order and ensure outputs are linked
+RUN cd packages/common && pnpm run build && \
+    cd ../database && pnpm run build && \
+    cd ../.. && \
+    # Link the built packages
+    pnpm link packages/common && \
+    pnpm link packages/database && \
+    # Build the backend
+    cd apps/http-backend && pnpm run build
 
 # Create the dist directory structure
 RUN mkdir -p dist/apps/http-backend
