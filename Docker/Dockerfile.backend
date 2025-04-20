@@ -15,20 +15,17 @@ COPY apps/http-backend ./apps/http-backend
 # Install pnpm
 RUN npm install -g pnpm@10.5.2
 
-# Install dependencies
+# Install root dependencies
 RUN pnpm install --frozen-lockfile
+
+# Install and build packages in order
+RUN cd packages/typescript-config && pnpm install && \
+    cd ../common && pnpm install && pnpm run build && \
+    cd ../database && pnpm install && pnpm run build && \
+    cd ../../apps/http-backend && pnpm install && pnpm run build
 
 # Generate database types
 RUN pnpm run generate:db
-
-# Build packages in order
-RUN cd packages/common && pnpm run build && \
-    cd ../database && pnpm run build && \
-    cd ../.. && \
-    # Install workspace dependencies
-    pnpm install --frozen-lockfile && \
-    # Build the backend
-    cd apps/http-backend && pnpm run build
 
 # Create the dist directory structure
 RUN mkdir -p dist/apps/http-backend
