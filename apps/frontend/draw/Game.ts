@@ -116,6 +116,8 @@ export class Game {
         this.ctx.restore();
 
         this.existingShapes.forEach((shape) => {
+            if (!shape) return;
+            
             if (shape.type === "rect") {
                 this.ctx.strokeStyle = shapeColor;
                 this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
