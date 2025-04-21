@@ -4,5 +4,12 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "typeRoots": ["./types", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+        "@repo/common/*": ["../../packages/common/src/*"],
+        "@repo/database/*": ["../../packages/database/src/*"]
+    },
+    "lib": ["ES2015"]
   },
+  "include": ["src/**/*"]
 }
