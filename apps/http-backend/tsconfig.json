@@ -13,6 +13,13 @@
   },
   "include": [
     "src/**/*",
-    "../../packages/common/src/**/*",     
-    "../../packages/database/src/**/*"]
+  ],
+  "references": [
+    {
+      "path": "../../packages/common"
+    },
+    {
+      "path": "../../packages/database"
+    }
+  ]
 }
