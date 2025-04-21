@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY package.json package-lock.json turbo.json ./
 
+COPY pnpm-lock.yaml pnpm-workspace.yaml ./
+
 COPY apps/http-backend ./apps/http-backend
 
 COPY packages/database ./packages/database
@@ -14,7 +16,7 @@ COPY packages/typescript-config ./packages/typescript-config
 
 RUN npm install -g pnpm@10.5.2
 
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 RUN pnpm run generate:db
 
