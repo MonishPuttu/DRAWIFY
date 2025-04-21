@@ -2,6 +2,7 @@
     "extends": "@repo/typescript-config/base.json",
     "compilerOptions": {
     "rootDir": "./src",
+    "rootDir": "../..",
     "outDir": "./dist",
     "typeRoots": ["./types", "./node_modules/@types"],
     "baseUrl": ".",
@@ -11,5 +12,8 @@
     },
     "lib": ["ES2015"]
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "../../packages/common/src/**/*",     
+    "../../packages/database/src/**/*"]
 }
