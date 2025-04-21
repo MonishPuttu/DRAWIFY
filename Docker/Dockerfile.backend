@@ -20,6 +20,12 @@ RUN pnpm run generate:db
 # 5) Build _all_ projects via Turbo
 RUN pnpm run build
 
+# --> ADD THESE INSPECTION COMMANDS <--
+    RUN echo "Checking common dist:" && ls -l /app/packages/common/dist/
+    RUN echo "Checking database dist:" && ls -l /app/packages/database/dist/
+    RUN echo "Checking http-backend dist:" && ls -l /app/apps/http-backend/dist/
+    # --> END OF INSPECTION COMMANDS <--
+
 # 6) Expose and run your HTTP backend
 EXPOSE 3001
 
