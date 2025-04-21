@@ -8,6 +8,10 @@ COPY apps/http-backend ./apps/http-backend
 
 COPY packages/database ./packages/database
 
+COPY packages/common ./packages/common
+
+COPY packages/typescript-config ./packages/typescript-config
+
 RUN npm install -g pnpm@10.5.2
 
 RUN pnpm install
