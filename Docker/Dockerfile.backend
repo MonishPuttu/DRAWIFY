@@ -22,4 +22,7 @@ RUN pnpm run build
 
 # 6) Expose and run your HTTP backend
 EXPOSE 3001
-CMD ["pnpm", "run", "start:backend"]
+
+CMD ["sleep", "infinity"]
+
+#CMD ["pnpm", "run", "start:backend"]
