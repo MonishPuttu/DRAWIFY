@@ -8,7 +8,9 @@ COPY apps/http-backend ./apps/http-backend
 COPY packages/common ./packages/common
 COPY packages/database ./packages/database
 COPY packages/typescript-config ./packages/typescript-config
-COPY packages/Config ./packages/Config
+
+# Copy environment file for dotenv
+COPY .env ./packages/Config/.env
 
 RUN npm install -g pnpm@10.5.2
 RUN pnpm install --frozen-lockfile
@@ -18,9 +20,6 @@ WORKDIR /app/apps/http-backend
 RUN pnpm run build
 
 WORKDIR /app
-
 EXPOSE 3001
-
 ENV DATABASE_URL=${DATABASE_URL}
-
-CMD ["pnpm", "run", "start:backend"]
+CMD ["pnpm", "run", "start:backend", "--filter=apps/http-backend"]
