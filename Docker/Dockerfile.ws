@@ -20,7 +20,7 @@ RUN pnpm install --frozen-lockfile
 
 RUN pnpm run generate:db
 
-RUN pnpm --filter ./apps/ws-backend run build
+RUN cd apps/ws-backend && pnpm run build
 
 EXPOSE 3002
 
