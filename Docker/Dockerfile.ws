@@ -10,7 +10,7 @@ RUN pnpm install
 
 RUN pnpm run generate:db
 
-RUN cd apps/ws-backend && pnpm run build
+RUN pnpm --filter ./apps/ws-backend... run build
 
 EXPOSE 3002
 
