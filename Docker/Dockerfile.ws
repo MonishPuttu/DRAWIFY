@@ -16,7 +16,7 @@ COPY packages/typescript-config ./packages/typescript-config
 
 RUN npm install -g pnpm@10.5.2
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 RUN pnpm run generate:db
 
