@@ -1,7 +1,15 @@
 {
     "extends": "@repo/typescript-config/base.json",
+    "references": [
+        { "path": "../../packages/common" },
+        { "path": "../../packages/database" }
+      ],
     "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist"
     },
+    "include": [
+        "./src/**/*.ts",
+        "./types/**/*.d.ts"
+    ],
 }

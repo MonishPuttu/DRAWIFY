@@ -2,33 +2,25 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# 1) Copy all manifests & lockfiles
 COPY package.json package-lock.json turbo.json ./
 COPY pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/http-backend ./apps/http-backend
+COPY packages/common ./packages/common
+COPY packages/database ./packages/database
+COPY packages/typescript-config ./packages/typescript-config
+COPY packages/Config ./packages/Config
 
-# 2) Copy the entire workspace 
-COPY apps        ./apps
-COPY packages    ./packages
-
-# 3) Install PNPM + dependencies
 RUN npm install -g pnpm@10.5.2
 RUN pnpm install --frozen-lockfile
-
-# 4) Prisma codegen
 RUN pnpm run generate:db
 
-# 5) Build _all_ projects via Turbo
+WORKDIR /app/apps/http-backend
 RUN pnpm run build
 
-# --> ADD THESE INSPECTION COMMANDS <--
-    RUN echo "Checking common dist:" && ls -l /app/packages/common/dist/
-    RUN echo "Checking database dist:" && ls -l /app/packages/database/dist/
-    RUN echo "Checking http-backend dist:" && ls -l /app/apps/http-backend/dist/
-    # --> END OF INSPECTION COMMANDS <--
+WORKDIR /app
 
-# 6) Expose and run your HTTP backend
 EXPOSE 3001
 
-CMD ["sleep", "infinity"]
+ENV DATABASE_URL=${DATABASE_URL}
 
-#CMD ["pnpm", "run", "start:backend"]
+CMD ["pnpm", "run", "start:backend"]
