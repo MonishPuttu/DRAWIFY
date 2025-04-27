@@ -1,4 +1,4 @@
-import { prismaClient } from '@repo/database/client';
+import { prismaClient } from '@repo/database';
 import WebSocket, { Server } from 'ws';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';

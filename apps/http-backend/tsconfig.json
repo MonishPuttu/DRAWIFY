@@ -4,24 +4,5 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "typeRoots": ["./types", "./node_modules/@types"],
-    "baseUrl": ".",
-    "paths": {
-        "@repo/common/*": ["../../packages/common/dist/*"],
-        "@repo/database": ["../../packages/database/dist/index.js"],
-        "@repo/database/*": ["../../packages/database/dist/*"], 
-        "@repo/database/client": ["../../packages/database/dist/index.js"]
-    },
-    "lib": ["ES2015"]
-  },
-  "include": [
-    "src/**/*",
-  ],
-  "references": [
-    {
-      "path": "../../packages/common"
-    },
-    {
-      "path": "../../packages/database"
     }
-  ]
 }

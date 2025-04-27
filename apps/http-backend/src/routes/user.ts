@@ -3,7 +3,7 @@ import { SignupValidation, signinValidation, roomValidations } from '@repo/commo
 import express, { Router } from 'express';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { prismaClient } from '@repo/database/client';
+import { prismaClient } from '@repo/database';
 import { AuthMiddleware } from '../middlewares/AuthMiddleware';
 const app = express();
 app.use(express.json());

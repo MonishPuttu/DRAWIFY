@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm run build && npm run start",
-    "build": "tsc -b || true; echo 'Checking http-backend dist after tsc:'; ls -l ./dist; echo 'Checking common dist:'; ls -l ../../packages/common/dist; echo 'Checking database dist:'; ls -l ../../packages/database/dist; if [ -f ./dist/index.js ]; then exit 0; else exit 1; fi",
+    "build": "tsc -b",
     "start": "node ./dist/index.js"
   },
   "dependencies": {
