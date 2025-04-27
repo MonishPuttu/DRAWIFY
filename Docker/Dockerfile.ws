@@ -12,7 +12,7 @@ RUN pnpm run generate:db
 
 RUN pnpm --filter @repo/common run build && pnpm --filter @repo/database run build
 
-RUN pnpm exec turbo build --filter=./apps/ws-backend...
+RUN cd packages/ws-backend && pnpm install
 
 EXPOSE 3002
 
