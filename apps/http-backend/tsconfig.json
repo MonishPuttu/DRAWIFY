@@ -8,6 +8,10 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "typeRoots": ["./types", "./node_modules/@types"],
+    "paths": {
+      "@repo/common/*": ["../../packages/common/src/*"],
+      "@repo/database/*": ["../../packages/database/src/*"]
+    }
     },
     "include": [
         "./src/**/*.ts",

@@ -6,7 +6,11 @@
       ],
     "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "@repo/common/*": ["../../packages/common/src/*"],
+      "@repo/database/*": ["../../packages/database/src/*"]
+    }
     },
     "include": [
         "./src/**/*.ts",
