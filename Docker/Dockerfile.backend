@@ -16,9 +16,11 @@ COPY packages/typescript-config ./packages/typescript-config
 
 RUN npm install -g pnpm@10.5.2
 
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 RUN pnpm run generate:db
+
+RUN pnpm --filter ./apps/http-backend run build
 
 EXPOSE 3001
 
