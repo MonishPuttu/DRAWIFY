@@ -14,7 +14,7 @@ RUN pnpm --filter @repo/common run build \
  && pnpm --filter @repo/database run build
 
 
-RUN pnpm --filter ./apps/http-backend... run build
+ RUN pnpm exec turbo build --filter=apps/http-backend...
 
 EXPOSE 3001
 

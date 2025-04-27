@@ -13,7 +13,8 @@ RUN pnpm run generate:db
 RUN pnpm --filter @repo/common run build \
  && pnpm --filter @repo/database run build
 
-RUN pnpm --filter ./apps/ws-backend... run build
+ RUN pnpm exec turbo build --filter=apps/ws-backend...
+
 
 EXPOSE 3002
 
