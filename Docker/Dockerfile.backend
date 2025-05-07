@@ -12,13 +12,13 @@ RUN pnpm run generate:db
 
 RUN pnpm --filter @repo/common run build && pnpm --filter @repo/database run build && pnpm --filter @repo/http-backend run build
 
-EXPOSE 3001
-
 ARG DATABASE_URL
 ARG WS_PORT
 ARG JWT_SECRET
 ENV DATABASE_URL=${DATABASE_URL}
-ENV WS_PORT=${WS_PORT}
+ENV HTTP_PORT=3001
 ENV JWT_SECRET=${JWT_SECRET}
+
+EXPOSE 3001
 
 CMD [ "pnpm", "run", "start:backend" ]

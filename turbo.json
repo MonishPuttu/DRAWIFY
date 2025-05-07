@@ -8,10 +8,7 @@
       "outputs": [
         "apps/frontend/.next/**",
         "!apps/frontend/.next/cache/**",
-        "packages/common/dist/**",
-        "packages/database/dist/**",
-        "apps/http-backend/dist/**",
-        "apps/ws-backend/dist/**"
+        "**/dist/**"
       ]
     },
 
