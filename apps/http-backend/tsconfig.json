@@ -8,6 +8,14 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "typeRoots": ["./types", "./node_modules/@types"],
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
     "paths": {
       "@repo/common/*": ["../../packages/common/src/*"],
       "@repo/database/*": ["../../packages/database/src/*"]

@@ -1,0 +1,10 @@
+{
+    "files": [],
+    "references": [
+      { "path": "./packages/common" },
+      { "path": "./packages/database" },
+      { "path": "./apps/http-backend" },
+      { "path": "./apps/ws-backend" }
+    ]
+}
+  

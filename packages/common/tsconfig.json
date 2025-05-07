@@ -6,6 +6,11 @@
       "composite": true,
       "declaration": true,
       "declarationMap": true,
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
     },
     "include": [
       "src/**/*",
