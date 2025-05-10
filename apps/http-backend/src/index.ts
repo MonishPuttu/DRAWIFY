@@ -3,7 +3,9 @@ const app = express();
 app.use(express.json());
 
 import cors from 'cors';
-app.use(cors());
+app.use(cors({origin: ["http://13.233.131.120",
+   "http://localhost:3000"],
+   credentials: true}));
 
 import dotenv from 'dotenv';
 import path from 'path';

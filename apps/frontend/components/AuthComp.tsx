@@ -69,7 +69,7 @@ export default function AuthPage({ type }: { type: "signin" | "signup" }) {
       }
 
       const response = await axios.post(
-        `http://localhost:3001/api/v1/user/${type}`,
+        `/api/v1/user/${type}`,
         requestData
       );
 

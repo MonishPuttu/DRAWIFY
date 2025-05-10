@@ -46,7 +46,7 @@ function RoomPage() {
     }
     
     try {
-      const response = await axios.post("http://localhost:3001/api/v1/user/room", {
+      const response = await axios.post("/api/v1/user/room", {
         slug: roomName
       }, {
         headers: {
