@@ -22,6 +22,7 @@ jobs:
           context: .
           file: ./Docker/Dockerfile.backend
           push: true
+          no-cache: true
           tags: monishdev/http-backend:${{ github.sha }}
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key

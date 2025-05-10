@@ -72,9 +72,10 @@ function RoomPage() {
     e.preventDefault();
 
     const slug = roomName;
-
+    
+    // use ${process.env.NEXT_PUBLIC_HTTP_BACKEND} in get request for local development
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_HTTP_BACKEND}/api/v1/user/room/${slug}`);
+      const response = await axios.get(`/api/v1/user/room/${slug}`);
       
       const roomId = response.data.roomId;
 

@@ -23,6 +23,7 @@ jobs:
           file: ./Docker/Dockerfile.ws
           push: true
           tags: monishdev/ws-backend:${{ github.sha }}
+          no-cache: true
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
           chmod 600 ~/ssh_key

@@ -6,9 +6,10 @@ const WS_URL = process.env.NEXT_PUBLIC_WS_URL
 
 export function RoomCanvas({ roomId }: {roomId: string}) {
     const [Socket, setSocket] = useState<WebSocket | null>(null);
-
+  
+    // use ${WS_URL} in useEffect for local development
     useEffect(() => {
-        const ws = new WebSocket(`${WS_URL}?token=${localStorage.getItem("token")}`)
+        const ws = new WebSocket(`?token=${localStorage.getItem("token")}`)
         // eslint-disable-next-line react-hooks/exhaustive-deps
         ws.onopen = () => {
             setSocket(ws);

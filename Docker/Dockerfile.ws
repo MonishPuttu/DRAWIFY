@@ -10,7 +10,7 @@ RUN pnpm install
 
 RUN pnpm run generate:db
 
-RUN pnpm --filter @repo/common run build && pnpm --filter @repo/database run build && pnpm --filter @repo/ws-backend run build
+RUN pnpm --filter @repo/common run build && pnpm --filter @repo/database run build && pnpm --filter ws-backend run build
 
 EXPOSE 3002
 
