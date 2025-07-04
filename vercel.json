@@ -1,7 +1,5 @@
 {
-  "projects": {
-    "default": {
-      "rootDirectory": "apps/frontend"
-    }
-  }
+  "buildCommand": "pnpm turbo run build --filter=frontend",
+  "outputDirectory": "apps/frontend/.next",
+  "framework": "nextjs"
 }
