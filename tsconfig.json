@@ -5,6 +5,13 @@
       { "path": "./packages/database" },
       { "path": "./apps/http-backend" },
       { "path": "./apps/ws-backend" }
-    ]
+    ],
+    "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@repo/common": ["packages/common/src"],
+      "@repo/database": ["packages/database/src"]
+    }
+  }
 }
   
