@@ -2,4 +2,10 @@ packages:
   - apps/*
   - packages/*
 onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
   - bcrypt
+  - prisma
+ignoredBuiltDependencies:
+  - core-js-pure
+  - sharp
