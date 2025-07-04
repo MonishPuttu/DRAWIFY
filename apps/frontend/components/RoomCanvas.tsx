@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Canvas } from "./Canvas";
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL
+//const WS_URL = process.env.NEXT_PUBLIC_WS_URL
 
 export function RoomCanvas({ roomId }: {roomId: string}) {
     const [Socket, setSocket] = useState<WebSocket | null>(null);

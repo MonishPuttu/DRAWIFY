@@ -9,6 +9,8 @@ dotenv.config({
 const port = Number(process.env.WS_PORT);
 const jwtSecret = process.env.JWT_SECRET || "";
 
+console.log(`WS server starting on port ${port}, JWT secret defined? ${!!jwtSecret}`);
+
 interface User {
     ws: WebSocket,
     rooms: string[],
