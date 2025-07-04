@@ -5,6 +5,7 @@
         { "path": "../../packages/database" }
       ],
     "compilerOptions": {
+    "baseUrl": ".",
     "rootDir": "./src",
     "outDir": "./dist",
     "typeRoots": ["./types", "./node_modules/@types"],
