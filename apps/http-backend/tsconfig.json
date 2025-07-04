@@ -1,10 +1,6 @@
 {
-    "extends": "@repo/typescript-config/base.json",
-    "references": [
-        { "path": "../../packages/common" },
-        { "path": "../../packages/database" }
-      ],
-    "compilerOptions": {
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "./src",
     "outDir": "./dist",
@@ -14,17 +10,20 @@
     "declarationMap": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "paths": {
-    "@repo/common": ["../../packages/common"],
-    "@repo/database": ["../../packages/database"]
-  }
-
-    },
-    "include": [
-        "./src/**/*.ts",
-        "./types/**/*.d.ts"
-    ],
+      "@repo/common": ["../../packages/common"],
+      "@repo/database": ["../../packages/database"]
+    }
+  },
+  "references": [
+    { "path": "../../packages/common" },
+    { "path": "../../packages/database" }
+  ],
+  "include": [
+    "./src/**/*.ts",
+    "./types/**/*.d.ts"
+  ]
 }
