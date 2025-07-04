@@ -17,8 +17,8 @@
       "forceConsistentCasingInFileNames": true,
       "strict": true,
     "paths": {
-      "@repo/common/*": ["../../packages/common/src/*"],
-      "@repo/database/*": ["../../packages/database/src/*"]
+      "@repo/common/*": ["../../packages/common/dist/*"],
+      "@repo/database/*": ["../../packages/database/dist/*"]
     }
     },
     "include": [
