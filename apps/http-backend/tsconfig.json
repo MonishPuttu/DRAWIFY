@@ -18,14 +18,10 @@
       "forceConsistentCasingInFileNames": true,
       "strict": true,
     "paths": {
-      // allow both `import x from "@repo/common"`…
-      "@repo/common":      ["../../packages/common/dist"],
-      // …and `import {Foo} from "@repo/common/foo"`
-      "@repo/common/*":    ["../../packages/common/dist/*"],
+    "@repo/common": ["../../packages/common"],
+    "@repo/database": ["../../packages/database"]
+  }
 
-      "@repo/database":    ["../../packages/database/dist"],
-      "@repo/database/*":  ["../../packages/database/dist/*"]
-    }
     },
     "include": [
         "./src/**/*.ts",

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { SignupValidation, signinValidation, roomValidations } from '@repo/common/types';
+import { SignupValidation, signinValidation, roomValidations } from '@repo/common';
 import express, { Router } from 'express';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
