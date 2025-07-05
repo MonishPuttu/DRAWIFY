@@ -1,9 +1,6 @@
 # Demo of Drawify deployed in AWS (EC2)
 
-<video width="600" controls>
-  <source src="packages/media/Drawify walkthrough2.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+(packages/media/Drawify walkthrough2.gif)
 
 # Turborepo starter
 
