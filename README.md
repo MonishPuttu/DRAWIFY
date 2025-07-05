@@ -1,6 +1,6 @@
 # Demo of Drawify deployed in AWS (EC2)
 
-(packages/media/Drawify walkthrough2.gif)
+![Demo](packages/media/Drawify%20walkthrough2.gif)
 
 # Turborepo starter
 
