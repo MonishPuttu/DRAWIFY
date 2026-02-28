@@ -152,7 +152,7 @@ UserRouter.post("/room", AuthMiddleware, async(req: Request, res: Response) => {
             roomId: room.id
         })
     } catch(e) {
-        res.status(411).json({
+        res.status(409).json({
             message: "Room already exists"
         });
         return;
