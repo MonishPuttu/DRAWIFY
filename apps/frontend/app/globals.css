@@ -1,3 +1,173 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ── Entry animations ── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+.animate-fade-in-up-delayed {
+  animation: fade-in-up 0.6s ease-out 0.15s forwards;
+  opacity: 0;
+}
+.animate-fade-in-up-delayed-2 {
+  animation: fade-in-up 0.6s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+/* ── SVG drawing stroke animation ── */
+@keyframes draw-stroke {
+  from { stroke-dashoffset: var(--path-length); }
+  to   { stroke-dashoffset: 0; }
+}
+
+.draw-rect {
+  --path-length: 448;
+  stroke-dasharray: 448;
+  stroke-dashoffset: 448;
+  animation: draw-stroke 1.8s ease-out 0.6s forwards;
+}
+
+.draw-circle {
+  --path-length: 352;
+  stroke-dasharray: 352;
+  stroke-dashoffset: 352;
+  animation: draw-stroke 1.6s ease-out 1.2s forwards;
+}
+
+.draw-rounded-rect {
+  --path-length: 416;
+  stroke-dasharray: 416;
+  stroke-dashoffset: 416;
+  animation: draw-stroke 1.5s ease-out 1.8s forwards;
+}
+
+.draw-line-1 {
+  --path-length: 300;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: draw-stroke 1s ease-out 2.4s forwards;
+}
+
+.draw-line-2 {
+  --path-length: 250;
+  stroke-dasharray: 250;
+  stroke-dashoffset: 250;
+  animation: draw-stroke 1s ease-out 2.8s forwards;
+}
+
+/* ── Cursor movement ── */
+@keyframes cursor-alice {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  10%  { opacity: 1; }
+  30%  { transform: translate(60px, 20px); }
+  60%  { transform: translate(120px, -10px); }
+  80%  { transform: translate(100px, 30px); }
+  100% { transform: translate(80px, 15px); }
+}
+
+@keyframes cursor-bob {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  15%  { opacity: 1; }
+  35%  { transform: translate(-40px, -30px); }
+  55%  { transform: translate(-80px, 10px); }
+  75%  { transform: translate(-60px, -20px); }
+  100% { transform: translate(-50px, 0px); }
+}
+
+.animate-cursor-alice {
+  animation: cursor-alice 6s ease-in-out 1s infinite alternate;
+}
+
+.animate-cursor-bob {
+  animation: cursor-bob 7s ease-in-out 2s infinite alternate;
+}
+
+/* ── Feature card sketch border ── */
+.feature-card {
+  will-change: transform;
+  position: relative;
+}
+
+.feature-card .sketch-border {
+  position: absolute;
+  inset: -1px;
+  border-radius: 1rem;
+  pointer-events: none;
+}
+
+.feature-card .sketch-border rect {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  transition: stroke-dashoffset 0.6s ease-out;
+}
+
+.feature-card:hover .sketch-border rect {
+  stroke-dashoffset: 0;
+}
+
+/* ── How-it-works connector drawing ── */
+@keyframes draw-connector {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.draw-connector {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+.connector-visible .draw-connector {
+  animation: draw-connector 0.8s ease-out forwards;
+}
+
+/* ── Step number sketch circle ── */
+@keyframes draw-step-circle {
+  from { stroke-dashoffset: 220; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.draw-step-circle {
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+}
+
+.step-visible .draw-step-circle {
+  animation: draw-step-circle 0.8s ease-out forwards;
+}
+
+/* ── Footer separator sketch line ── */
+@keyframes draw-footer-line {
+  from { stroke-dashoffset: 1200; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.draw-footer-line {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+}
+
+.footer-line-visible .draw-footer-line {
+  animation: draw-footer-line 1.5s ease-out forwards;
+}
+
+/* ── Dot pattern ── */
+.bg-dots {
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .bg-dots {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+}
