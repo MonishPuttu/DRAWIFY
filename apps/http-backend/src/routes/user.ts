@@ -119,6 +119,228 @@ UserRouter.post("/signin", async (req: Request, res: Response) => {
   }
 });
 
+// ── GitHub OAuth ──
+UserRouter.get("/auth/github", (req: Request, res: Response) => {
+  const clientId = process.env.GITHUB_CLIENT_ID;
+  const callbackUrl =
+    process.env.GITHUB_CALLBACK_URL ||
+    "http://localhost:3000/api/v1/user/auth/github/callback";
+
+  if (!clientId) {
+    res.status(500).json({ message: "GitHub OAuth not configured" });
+    return;
+  }
+
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(callbackUrl)}&scope=user:email`;
+  res.redirect(githubAuthUrl);
+});
+
+UserRouter.get("/auth/github/callback", async (req: Request, res: Response) => {
+  const { code } = req.query;
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+
+  if (!code) {
+    res.redirect(
+      `${frontendUrl}/auth/callback?error=${encodeURIComponent("No authorization code received")}`,
+    );
+    return;
+  }
+
+  try {
+    // Exchange code for access token
+    const tokenResponse = await fetch(
+      "https://github.com/login/oauth/access_token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          client_id: process.env.GITHUB_CLIENT_ID,
+          client_secret: process.env.GITHUB_CLIENT_SECRET,
+          code,
+          redirect_uri:
+            process.env.GITHUB_CALLBACK_URL ||
+            "http://localhost:3000/api/v1/user/auth/github/callback",
+        }),
+      },
+    );
+
+    const tokenData = await tokenResponse.json();
+
+    if (!tokenData.access_token) {
+      res.redirect(
+        `${frontendUrl}/auth/callback?error=${encodeURIComponent("Failed to get access token from GitHub")}`,
+      );
+      return;
+    }
+
+    // Get user info
+    const userResponse = await fetch("https://api.github.com/user", {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+    const githubUser = await userResponse.json();
+
+    // Get primary email
+    const emailsResponse = await fetch("https://api.github.com/user/emails", {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+    const emails = await emailsResponse.json();
+    const primaryEmail =
+      emails.find((e: any) => e.primary)?.email ||
+      githubUser.email ||
+      `${githubUser.login}@github.com`;
+
+    // Find or create user
+    let user = await prismaClient.user.findFirst({
+      where: { provider: "github", providerId: String(githubUser.id) },
+    });
+
+    if (!user) {
+      let username = githubUser.login;
+      const existingUser = await prismaClient.user.findUnique({
+        where: { username },
+      });
+      if (existingUser) {
+        username = `${username}_${Math.random().toString(36).slice(2, 6)}`;
+      }
+
+      user = await prismaClient.user.create({
+        data: {
+          username,
+          email: primaryEmail,
+          photo: githubUser.avatar_url,
+          provider: "github",
+          providerId: String(githubUser.id),
+        },
+      });
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      res.redirect(
+        `${frontendUrl}/auth/callback?error=${encodeURIComponent("Server configuration error")}`,
+      );
+      return;
+    }
+
+    const token = jwt.sign({ userId: user.id }, jwtSecret);
+    res.redirect(`${frontendUrl}/auth/callback?token=${token}`);
+  } catch (error) {
+    console.error("GitHub OAuth error:", error);
+    res.redirect(
+      `${frontendUrl}/auth/callback?error=${encodeURIComponent("GitHub authentication failed")}`,
+    );
+  }
+});
+
+// ── Google OAuth ──
+UserRouter.get("/auth/google", (req: Request, res: Response) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const callbackUrl =
+    process.env.GOOGLE_CALLBACK_URL ||
+    "http://localhost:3000/api/v1/user/auth/google/callback";
+
+  if (!clientId) {
+    res.status(500).json({ message: "Google OAuth not configured" });
+    return;
+  }
+
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(callbackUrl)}&response_type=code&scope=openid%20email%20profile&access_type=offline`;
+  res.redirect(googleAuthUrl);
+});
+
+UserRouter.get("/auth/google/callback", async (req: Request, res: Response) => {
+  const { code } = req.query;
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+
+  if (!code) {
+    res.redirect(
+      `${frontendUrl}/auth/callback?error=${encodeURIComponent("No authorization code received")}`,
+    );
+    return;
+  }
+
+  try {
+    // Exchange code for tokens
+    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        code,
+        redirect_uri:
+          process.env.GOOGLE_CALLBACK_URL ||
+          "http://localhost:3000/api/v1/user/auth/google/callback",
+        grant_type: "authorization_code",
+      }),
+    });
+
+    const tokenData = await tokenResponse.json();
+
+    if (!tokenData.access_token) {
+      res.redirect(
+        `${frontendUrl}/auth/callback?error=${encodeURIComponent("Failed to get access token from Google")}`,
+      );
+      return;
+    }
+
+    // Get user info
+    const userResponse = await fetch(
+      "https://www.googleapis.com/oauth2/v2/userinfo",
+      {
+        headers: { Authorization: `Bearer ${tokenData.access_token}` },
+      },
+    );
+    const googleUser = await userResponse.json();
+
+    // Find or create user
+    let user = await prismaClient.user.findFirst({
+      where: { provider: "google", providerId: googleUser.id },
+    });
+
+    if (!user) {
+      let username =
+        googleUser.name?.replace(/\s+/g, "_").toLowerCase() ||
+        googleUser.email.split("@")[0];
+      const existingUser = await prismaClient.user.findUnique({
+        where: { username },
+      });
+      if (existingUser) {
+        username = `${username}_${Math.random().toString(36).slice(2, 6)}`;
+      }
+
+      user = await prismaClient.user.create({
+        data: {
+          username,
+          email: googleUser.email,
+          photo: googleUser.picture,
+          provider: "google",
+          providerId: googleUser.id,
+        },
+      });
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      res.redirect(
+        `${frontendUrl}/auth/callback?error=${encodeURIComponent("Server configuration error")}`,
+      );
+      return;
+    }
+
+    const token = jwt.sign({ userId: user.id }, jwtSecret);
+    res.redirect(`${frontendUrl}/auth/callback?token=${token}`);
+  } catch (error) {
+    console.error("Google OAuth error:", error);
+    res.redirect(
+      `${frontendUrl}/auth/callback?error=${encodeURIComponent("Google authentication failed")}`,
+    );
+  }
+});
+
 UserRouter.post(
   "/room",
   AuthMiddleware,
