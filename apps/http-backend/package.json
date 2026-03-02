@@ -8,6 +8,7 @@
     "start": "node ./dist/index.js"
   },
   "dependencies": {
+    "@repo/common": "workspace:*",
     "@repo/database": "workspace:*",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
@@ -21,7 +22,6 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@repo/common": "workspace:*",
     "@repo/typescript-config": "workspace:*"
   },
   "keywords": [],
