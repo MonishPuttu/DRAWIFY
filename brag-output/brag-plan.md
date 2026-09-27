@@ -28,3 +28,15 @@
 
 ## Sound
 C major, 112 bpm, bright plucky arp; pen scratches under each stroke, pops for cards, click + chime on Copy, closing chime.
+
+## Voice-over version (39s)
+The final `brag.mp4` is the extended cut with narration. Voice: Kokoro TTS (`af_heart`), generated locally. Each scene's timeline was stretched to fit its line (entrances and transitions keep their original speed; only the hold in the middle of each scene slows down), the soundtrack was re-timed to match, and the music ducks under the voice. Some spellings below are written for the voice, e.g. "Ani-Talk", "R-x Check".
+
+| # | Time | Narration |
+|---|------|-----------|
+| 1 | 0.0–4.0s | Two people. One whiteboard. Drawing at the same time. |
+| 2 | 4.0–11.2s | Meet Drawify: an open source, hand-drawn style whiteboard, built for real-time collaboration. |
+| 3 | 11.2–17.2s | Create a room, give it a name, and you're in. Or join an existing room with just its name. |
+| 4 | 17.2–25.9s | Every rectangle, circle and pencil stroke is sent over WebSockets, so everyone in the room sees it instantly, on their own screen. |
+| 5 | 25.9–32.8s | When you're ready, copy the room link and share it. Anyone who opens it joins the same canvas, live. |
+| 6 | 32.8–39.0s | Drawify. Sketch it together. It's free and open source on GitHub. |
