@@ -1,0 +1,1 @@
+Two browsers, one canvas, every stroke synced live. Drawify is my open-source hand-drawn whiteboard — create a room, share the link, sketch together. https://github.com/MonishPuttu/DRAWIFY
