@@ -1,5 +1,14 @@
 # Demo of Drawify deployed in AWS (EC2)
 
+<!-- brag:start -->
+<p align="center">
+  <a href="brag-output/brag.mp4"><img src="brag-output/brag.gif" alt="Drawify launch video" width="100%"></a>
+  <br>
+  <sub>▶ <a href="brag-output/brag.mp4"><b>Watch the full launch video with voice-over</b></a> (39s, sound on)</sub>
+</p>
+<!-- brag:end -->
+
+
 ![Demo](https://github.com/MonishPuttu/DRAWIFY/blob/main/packages/media/Drawify%20walkthrough2%20(1).gif)
 
 ---
